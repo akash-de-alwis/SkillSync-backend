@@ -1,3 +1,4 @@
+// plans
 package com.skillsynclab.backend.repository;
 
 import com.skillsynclab.backend.model.LearningPlan;
