@@ -23,19 +23,23 @@ public class LearningPlanService {
     }
 
     public LearningPlan createPlan(LearningPlan plan) {
-        plan.setCreatedAt(LocalDateTime.now());
+        plan.setCreatedAt(LocalDateTime.now().toString());
+        plan.setFollowers(0);
         return learningPlanRepository.save(plan);
     }
 
-    public LearningPlan updatePlan(String id, LearningPlan planDetails) {
-        LearningPlan plan = learningPlanRepository.findById(id).orElseThrow();
-        plan.setTitle(planDetails.getTitle());
-        plan.setDescription(planDetails.getDescription());
-        plan.setAuthor(planDetails.getAuthor());
-        plan.setTopics(planDetails.getTopics());
-        plan.setDuration(planDetails.getDuration());
-        plan.setFollowers(planDetails.getFollowers());
-        return learningPlanRepository.save(plan);
+    public LearningPlan updatePlan(String id, LearningPlan plan) {
+        LearningPlan existingPlan = learningPlanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Plan not found"));
+        existingPlan.setTitle(plan.getTitle());
+        existingPlan.setDescription(plan.getDescription());
+        existingPlan.setTopics(plan.getTopics());
+        existingPlan.setDuration(plan.getDuration());
+        existingPlan.setGoals(plan.getGoals());
+        existingPlan.setResources(plan.getResources());
+        existingPlan.setDifficulty(plan.getDifficulty());
+        existingPlan.setPrerequisites(plan.getPrerequisites());
+        return learningPlanRepository.save(existingPlan);
     }
 
     public void deletePlan(String id) {

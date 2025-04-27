@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/skill-posts")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
 public class SkillPostController {
     @Autowired
     private SkillPostService skillPostService;
@@ -44,11 +44,9 @@ public class SkillPostController {
             @AuthenticationPrincipal OAuth2User principal) {
         try {
             if (postJson == null || postJson.trim().isEmpty()) {
-                System.err.println("postJson is null or empty");
                 return ResponseEntity.badRequest().body(null);
             }
 
-            System.out.println("Received postJson: " + postJson);
             SkillPost post = objectMapper.readValue(postJson, SkillPost.class);
 
             Author author = new Author();
@@ -58,20 +56,16 @@ public class SkillPostController {
 
             if (image != null && !image.isEmpty()) {
                 if (image.getSize() > 5 * 1024 * 1024) {
-                    System.err.println("Image size exceeds 5MB limit: " + image.getSize());
                     return ResponseEntity.status(400).body(null);
                 }
                 String base64Image = java.util.Base64.getEncoder().encodeToString(image.getBytes());
                 String imageData = "data:image/jpeg;base64," + base64Image;
                 post.setImage(imageData);
-                System.out.println("Image set: " + imageData.substring(0, Math.min(50, imageData.length())) + "...");
             }
 
             SkillPost createdPost = skillPostService.createPost(post);
-            System.out.println("Created post: " + createdPost);
             return ResponseEntity.ok(createdPost);
         } catch (Exception e) {
-            System.err.println("Unexpected error creating post: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500).body(null);
         }
@@ -85,40 +79,36 @@ public class SkillPostController {
             @AuthenticationPrincipal OAuth2User principal) {
         try {
             if (postJson == null || postJson.trim().isEmpty()) {
-                System.err.println("postJson is null or empty for update");
                 return ResponseEntity.badRequest().body(null);
             }
 
-            System.out.println("Received update postJson: " + postJson);
             SkillPost post = objectMapper.readValue(postJson, SkillPost.class);
 
-            SkillPost existingPost = skillPostService.getPostById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+            SkillPost existingPost = skillPostService.getPostById(id)
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
 
-            // Check if the authenticated user is the post owner
             String userName = principal.getAttribute("name");
             if (!existingPost.getAuthor().getName().equals(userName)) {
-                System.err.println("User " + userName + " is not authorized to edit post " + id);
-                return ResponseEntity.status(403).body(null); // Forbidden
+                return ResponseEntity.status(403).body(null);
             }
 
-            post.setAuthor(existingPost.getAuthor());
-
+            // Preserve existing image if no new image is provided
             if (image != null && !image.isEmpty()) {
                 if (image.getSize() > 5 * 1024 * 1024) {
-                    System.err.println("Image size exceeds 5MB limit: " + image.getSize());
                     return ResponseEntity.status(400).body(null);
                 }
                 String base64Image = java.util.Base64.getEncoder().encodeToString(image.getBytes());
                 String imageData = "data:image/jpeg;base64," + base64Image;
                 post.setImage(imageData);
-                System.out.println("Updated image set: " + imageData.substring(0, Math.min(50, imageData.length())) + "...");
+            } else {
+                post.setImage(existingPost.getImage());
             }
 
+            post.setAuthor(existingPost.getAuthor());
+
             SkillPost updatedPost = skillPostService.updatePost(id, post);
-            System.out.println("Updated post: " + updatedPost);
             return ResponseEntity.ok(updatedPost);
         } catch (Exception e) {
-            System.err.println("Error updating post with ID " + id + ": " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500).body(null);
         }
@@ -129,20 +119,31 @@ public class SkillPostController {
             @PathVariable String id,
             @AuthenticationPrincipal OAuth2User principal) {
         try {
-            SkillPost existingPost = skillPostService.getPostById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+            SkillPost existingPost = skillPostService.getPostById(id)
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
 
-            // Check if the authenticated user is the post owner
             String userName = principal.getAttribute("name");
             if (!existingPost.getAuthor().getName().equals(userName)) {
-                System.err.println("User " + userName + " is not authorized to delete post " + id);
-                return ResponseEntity.status(403).build(); // Forbidden
+                return ResponseEntity.status(403).build();
             }
 
             skillPostService.deletePost(id);
-            System.out.println("Deleted post with ID: " + id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            System.err.println("Error deleting post with ID " + id + ": " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<SkillPost> toggleLike(
+            @PathVariable String id,
+            @AuthenticationPrincipal OAuth2User principal) {
+        try {
+            String userId = principal.getAttribute("sub");
+            SkillPost updatedPost = skillPostService.toggleLike(id, userId);
+            return ResponseEntity.ok(updatedPost);
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
@@ -156,6 +157,7 @@ public class SkillPostController {
             response.put("email", principal.getAttribute("email"));
             response.put("name", principal.getAttribute("name"));
             response.put("picture", principal.getAttribute("picture"));
+            response.put("sub", principal.getAttribute("sub"));
             return ResponseEntity.ok(response);
         }
         response.put("status", "Not authenticated");

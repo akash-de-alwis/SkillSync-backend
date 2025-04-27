@@ -23,18 +23,23 @@ public class LearningProgressService {
     }
 
     public LearningProgress createProgress(LearningProgress progress) {
-        progress.setCreatedAt(LocalDateTime.now());
+        progress.setCreatedAt(LocalDateTime.now().toString());
         return learningProgressRepository.save(progress);
     }
 
-    public LearningProgress updateProgress(String id, LearningProgress progressDetails) {
-        LearningProgress progress = learningProgressRepository.findById(id).orElseThrow();
-        progress.setTitle(progressDetails.getTitle());
-        progress.setDescription(progressDetails.getDescription());
-        progress.setProgressPercent(progressDetails.getProgressPercent());
-        progress.setMilestone(progressDetails.getMilestone());
-        progress.setAuthor(progressDetails.getAuthor());
-        return learningProgressRepository.save(progress);
+    public LearningProgress updateProgress(String id, LearningProgress progress) {
+        LearningProgress existingProgress = learningProgressRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Progress not found"));
+        existingProgress.setTitle(progress.getTitle());
+        existingProgress.setDescription(progress.getDescription());
+        existingProgress.setProgressPercent(progress.getProgressPercent());
+        existingProgress.setMilestone(progress.getMilestone());
+        existingProgress.setTemplate(progress.getTemplate());
+        existingProgress.setSkillsGained(progress.getSkillsGained());
+        existingProgress.setChallengesFaced(progress.getChallengesFaced());
+        existingProgress.setNextSteps(progress.getNextSteps());
+        existingProgress.setEvidenceLink(progress.getEvidenceLink());
+        return learningProgressRepository.save(existingProgress);
     }
 
     public void deleteProgress(String id) {

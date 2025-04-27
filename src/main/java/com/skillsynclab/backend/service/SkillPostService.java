@@ -24,18 +24,15 @@ public class SkillPostService {
 
     public SkillPost createPost(SkillPost post) {
         post.setCreatedAt(LocalDateTime.now());
-        SkillPost savedPost = skillPostRepository.save(post);
-        System.out.println("Saved Post in Service: " + savedPost);
-        return savedPost;
+        return skillPostRepository.save(post);
     }
 
     public SkillPost updatePost(String id, SkillPost postDetails) {
-        SkillPost post = skillPostRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+        SkillPost post = skillPostRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
         post.setTitle(postDetails.getTitle());
         post.setDescription(postDetails.getDescription());
         post.setAuthor(postDetails.getAuthor());
-        post.setLikes(postDetails.getLikes());
-        post.setComments(postDetails.getComments());
         post.setImage(postDetails.getImage());
         post.setCategory(postDetails.getCategory());
         post.setTags(postDetails.getTags());
@@ -46,5 +43,16 @@ public class SkillPostService {
 
     public void deletePost(String id) {
         skillPostRepository.deleteById(id);
+    }
+
+    public SkillPost toggleLike(String postId, String userId) {
+        SkillPost post = skillPostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        if (post.getLikedBy().contains(userId)) {
+            post.getLikedBy().remove(userId); // Unlike
+        } else {
+            post.getLikedBy().add(userId); // Like
+        }
+        return skillPostRepository.save(post);
     }
 }
