@@ -1,4 +1,4 @@
-// plans
+// plans done
 package com.skillsynclab.backend.model;
 
 import org.springframework.data.annotation.Id;

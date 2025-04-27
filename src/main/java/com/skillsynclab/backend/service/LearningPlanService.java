@@ -1,4 +1,4 @@
-// plans
+// plans done
 package com.skillsynclab.backend.service;
 
 import com.skillsynclab.backend.model.LearningPlan;
