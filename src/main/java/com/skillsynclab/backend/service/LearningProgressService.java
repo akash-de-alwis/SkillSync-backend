@@ -1,5 +1,6 @@
 package com.skillsynclab.backend.service;
 
+
 import com.skillsynclab.backend.model.LearningProgress;
 import com.skillsynclab.backend.repository.LearningProgressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
