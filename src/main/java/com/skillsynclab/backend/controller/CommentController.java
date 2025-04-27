@@ -1,6 +1,5 @@
 package com.skillsynclab.backend.controller;
 
-
 import com.skillsynclab.backend.exception.UnauthorizedException;
 import com.skillsynclab.backend.model.Author;
 import com.skillsynclab.backend.model.Comment;
