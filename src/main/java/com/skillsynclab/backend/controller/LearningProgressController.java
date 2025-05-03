@@ -19,6 +19,7 @@ public class LearningProgressController {
     @Autowired
     private LearningProgressService learningProgressService;
 
+
     @GetMapping
     public List<LearningProgress> getAllProgress() {
         return learningProgressService.getAllProgress();
