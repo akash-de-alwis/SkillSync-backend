@@ -46,6 +46,8 @@ public class LearningProgressService {
         return learningProgressRepository.save(existingProgress);
     }
 
+
+
     public void deleteProgress(String id) {
         learningProgressRepository.deleteById(id);
     }
