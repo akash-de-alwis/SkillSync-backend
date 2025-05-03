@@ -33,6 +33,7 @@ public class LearningProgressService {
 
 
 
+
     public LearningProgress updateProgress(String id, LearningProgress progress) {
         LearningProgress existingProgress = learningProgressRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Progress not found"));
