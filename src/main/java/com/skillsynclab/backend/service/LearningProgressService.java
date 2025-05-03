@@ -20,9 +20,11 @@ public class LearningProgressService {
         return learningProgressRepository.findAll();
     }
 
+
     public Optional<LearningProgress> getProgressById(String id) {
         return learningProgressRepository.findById(id);
     }
+
 
     public LearningProgress createProgress(LearningProgress progress) {
         progress.setCreatedAt(LocalDateTime.now().toString());
