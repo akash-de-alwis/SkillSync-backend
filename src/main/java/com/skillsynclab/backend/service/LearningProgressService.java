@@ -15,6 +15,7 @@ public class LearningProgressService {
     @Autowired
     private LearningProgressRepository learningProgressRepository;
 
+
     public List<LearningProgress> getAllProgress() {
         return learningProgressRepository.findAll();
     }
@@ -27,6 +28,8 @@ public class LearningProgressService {
         progress.setCreatedAt(LocalDateTime.now().toString());
         return learningProgressRepository.save(progress);
     }
+
+
 
     public LearningProgress updateProgress(String id, LearningProgress progress) {
         LearningProgress existingProgress = learningProgressRepository.findById(id)
