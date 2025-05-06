@@ -77,7 +77,6 @@ public class LearningPlan {
         return followers;
     }
 
-
     public void setFollowers(int followers) {
         this.followers = followers;
     }
