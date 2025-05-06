@@ -38,6 +38,7 @@ public class LearningPlanService {
         existingPlan.setTopics(plan.getTopics());
         existingPlan.setDuration(plan.getDuration());
         existingPlan.setGoals(plan.getGoals());
+
         existingPlan.setResources(plan.getResources());
         existingPlan.setDifficulty(plan.getDifficulty());
         existingPlan.setPrerequisites(plan.getPrerequisites());
