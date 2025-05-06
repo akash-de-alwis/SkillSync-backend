@@ -48,7 +48,6 @@ public class LearningPlanController {
             return ResponseEntity.status(500).build();
 
         }
-
     }
 
     @PutMapping("/{id}")
