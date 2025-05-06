@@ -44,7 +44,6 @@ public class LearningPlanService {
         return learningPlanRepository.save(existingPlan);
     }
 
-
     public void deletePlan(String id) {
         learningPlanRepository.deleteById(id);
     }
