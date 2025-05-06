@@ -46,6 +46,7 @@ public class LearningPlanController {
         } catch (Exception e) {
             System.err.println("Error creating learning plan: " + e.getMessage());
             return ResponseEntity.status(500).build();
+
         }
     }
 
