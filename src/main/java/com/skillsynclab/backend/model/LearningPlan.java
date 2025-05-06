@@ -69,6 +69,7 @@ public class LearningPlan {
         return duration;
     }
 
+
     public void setDuration(String duration) {
         this.duration = duration;
     }
