@@ -117,6 +117,7 @@ public class LearningPlan {
         return prerequisites;
     }
 
+
     public void setPrerequisites(String prerequisites) {
         this.prerequisites = prerequisites;
     }
