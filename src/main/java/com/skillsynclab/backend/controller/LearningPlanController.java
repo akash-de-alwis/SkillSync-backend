@@ -47,7 +47,6 @@ public class LearningPlanController {
             System.err.println("Error creating learning plan: " + e.getMessage());
             return ResponseEntity.status(500).build();
         }
-
     }
 
     @PutMapping("/{id}")
