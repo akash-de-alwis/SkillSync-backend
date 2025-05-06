@@ -19,3 +19,4 @@ public class Comment {
     @DBRef
     private SkillPost post; // Reference to the associated SkillPost
 }
+
