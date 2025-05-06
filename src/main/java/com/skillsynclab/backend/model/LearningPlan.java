@@ -81,7 +81,6 @@ public class LearningPlan {
         this.followers = followers;
     }
 
-
     public String getCreatedAt() {
         return createdAt;
     }
