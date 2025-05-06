@@ -32,6 +32,7 @@ public class LearningPlanController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
     @PostMapping
     public ResponseEntity<LearningPlan> createPlan(
             @RequestBody LearningPlan plan,
