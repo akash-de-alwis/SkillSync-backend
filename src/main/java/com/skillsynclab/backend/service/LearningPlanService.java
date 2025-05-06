@@ -42,6 +42,7 @@ public class LearningPlanService {
         existingPlan.setDifficulty(plan.getDifficulty());
         existingPlan.setPrerequisites(plan.getPrerequisites());
         return learningPlanRepository.save(existingPlan);
+
     }
 
     public void deletePlan(String id) {
