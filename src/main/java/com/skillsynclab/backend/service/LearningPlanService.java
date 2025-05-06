@@ -28,6 +28,7 @@ public class LearningPlanService {
         plan.setCreatedAt(LocalDateTime.now().toString());
         plan.setFollowers(0);
         return learningPlanRepository.save(plan);
+
     }
 
     public LearningPlan updatePlan(String id, LearningPlan plan) {
